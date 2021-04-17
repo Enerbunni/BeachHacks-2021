@@ -1,33 +1,34 @@
 import tkinter as tkinter
 from datetime import date
 
-#creates the 
+# creates the
+
+
 def monthGenerator(startDate, numberOfDays):
-    print('hi')
-
-window = tkinter.Tk()
-window.title("Calender")
-window.geometry("1000x800")
-monthGenerator(1, 31)
-window.mainloop()
+    for row in range(5):
+        for col in range(6):
+            t = tkinter.Label(canvas, text=(row, col))
+            t.grid(row=row, column=col)
 
 
-#create function for calculating if it is a leap year
+# create function for calculating if it is a leap year
 def isLeapYear(year):
-    if year % 4 == 0 and (year % 100 != 0 or year % 400 ==0):
+    if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0):
         return True
     else:
         return False
 
-#create function for calculating what day month starts
-def dayMonthStarts (month, year):
-    #get last two digits (default 21 for 2021)
+# create function for calculating what day month starts
+
+
+def dayMonthStarts(month, year):
+    # get last two digits (default 21 for 2021)
     lastTwoYear = year - 2000
-    #integer division by 4
+    # integer division by 4
     calculation = lastTwoYear // 4
-    #add day of month (always 1) 
+    # add day of month (always 1)
     calculation += 1
-    #table for adding proper month key
+    # table for adding proper month key
     if month == 1 or month == 8:
         calculation += 1
     elif month == 2 or month == 3 or month == 11:
@@ -37,27 +38,33 @@ def dayMonthStarts (month, year):
     elif month == 6:
         calculation += 5
     elif month == 8:
-        calcualtion += 3
+        calculation += 3
     elif month == 9 or month == 12:
         calculation += 6
     else:
         calculation += 0
-    #check if the year is a leap year
+    # check if the year is a leap year
     leapYear = isLeapYear(year)
-    #subtract 1 if it is January or February of a leap year
+    # subtract 1 if it is January or February of a leap year
     if leapYear and month == 1 or month == 2:
         calculation -= 1
-    #add century code (assume we are in 2000's)
+    # add century code (assume we are in 2000's)
     calculation += 6
-    #add last two digits to the caluclation
+    # add last two digits to the caluclation
     calculation += lastTwoYear
-    #get number output based on calculation (Sunday = 1, Monday =2..... Saturday =0)
+    # get number output based on calculation (Sunday = 1, Monday =2..... Saturday =0)
     dayOfWeek = calculation % 7
     return dayOfWeek
 
-    
-        
 
-dayOf1st = dayMonthStarts ( date.today().month, date.today().year)
+window = tkinter.Tk()
+window.title("Calender")
+window.geometry("1000x800")
+
+canvas = tkinter.Canvas(window)
+monthGenerator(1, 31)
+window.mainloop()
+
+
+dayOf1st = dayMonthStarts(date.today().month, date.today().year)
 print(dayOf1st)
-
