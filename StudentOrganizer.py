@@ -1,12 +1,16 @@
 import tkinter as tkinter
 from datetime import date
 
+#creates the 
+def monthGenerator(startDate, numberOfDays):
+    print('hi')
+
 window = tkinter.Tk()
 window.title("Calender")
 window.geometry("1000x800")
-btn = tkinter.Button(window, text = 'This should quit the program', bd = '5', command = window.destroy)
-btn.pack(side = 'right')
+monthGenerator(1, 31)
 window.mainloop()
+
 
 #create function for calculating if it is a leap year
 def isLeapYear(year):
@@ -56,3 +60,4 @@ def dayMonthStarts (month, year):
 
 dayOf1st = dayMonthStarts ( date.today().month, date.today().year)
 print(dayOf1st)
+
