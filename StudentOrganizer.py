@@ -1,8 +1,12 @@
 import tkinter as tkinter
 
+#creates the 
+def monthGenerator(startDate, numberOfDays):
+    print('hi')
+
 window = tkinter.Tk()
 window.title("Calender")
 window.geometry("1000x800")
-btn = tkinter.Button(window, text = 'This should quit the program', bd = '5', command = window.destroy)
-btn.pack(side = 'right')
+monthGenerator(1, 31)
 window.mainloop()
+
