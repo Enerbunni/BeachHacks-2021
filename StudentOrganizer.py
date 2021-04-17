@@ -33,7 +33,7 @@ def dayMonthStarts (month, year):
     elif month == 6:
         calculation += 5
     elif month == 8:
-        calcualtion += 3
+        calculation += 3
     elif month == 9 or month == 12:
         calculation += 6
     else:
@@ -51,8 +51,25 @@ def dayMonthStarts (month, year):
     dayOfWeek = calculation % 7
     return dayOfWeek
 
+#create function to figure out how many days are in a month
+def daysInMonth (month):
+    #all months that have 31 days
+    if month == 1 or month == 3 or month == 5 or month == 7 or month == 8 or month == 12 or month == 10:
+        numberDays = 31
+    #all months that have 30 days
+    elif month == 4 or month == 6 or month == 9 or month == 11:
+        numberDays = 30
+    else:
+        #check to see if leap year to determine how many days in Feb
+        if leapYear:
+            numberDays = 29
+        else:
+            numberDays = 28
+    return numberDays
     
         
 
 dayOf1st = dayMonthStarts ( date.today().month, date.today().year)
+numberDaysofMonth = daysInMonth ( date.today().month)
 print(dayOf1st)
+print(numberDaysofMonth)
