@@ -3,9 +3,12 @@ import tkinter as tkinter
 from tkinter import filedialog
 from datetime import date
 
+# Sets the month and year variable based on the current date
+month = date.today().month
+year = date.today().year
 
-# Create function to output the month and year
-def printMonthYear(month):
+#create function to output the month and year
+def printMonthYear(month, year):
     
     # Create table for the written month
     if month == 1:
@@ -33,36 +36,39 @@ def printMonthYear(month):
     else:
         writtenMonth = "December"
 
-    monthYear = tkinter.Label(calendarFrame,  text = writtenMonth + " " + str(date.today().year))
-    monthYear.grid(column = 3, row = 0)
+    #output month and year at top of calendar
+    monthYear = tkinter.Label(calendarFrame,  text = writtenMonth + " " + str(year), font= ("Arial", 20))
+    monthYear.grid(column = 2, row = 0, columnspan = 3)
 
 # Function to switch month calendar (1 for forwards and -1 for backwards)
 def switchMonths(direction):
     global calendarFrame
     global month
-    # Destroys the current calendarFrame 
+    global year
+    #check if we are goint to a new year
+    if month == 12 and direction == 1:
+        month = 0
+        year += 1
+    if month == 1 and direction == -1:
+        month = 13 
+        year -= 1
+    #reprint the calendar witht the new values
     calendarFrame.destroy()
-
-    # Creates a new calendarFrame
     calendarFrame = tkinter.Frame(window)
     calendarFrame.grid()
-
-    # Encountered a werid VS Code bug
-    printMonthYear(month + direction) # pylint: disable=E0601
-
-    # Generates the rest of the new month
+    printMonthYear(month + direction, year) # pylint: disable=E0601
     makeButtons()
-    monthGenerator(dayMonthStarts(month + direction, today.year), daysInMonth(month + direction, today.year))
+    monthGenerator(dayMonthStarts(month + direction, year), daysInMonth(month + direction, year))
     month += direction
-    
+  
 
 
 # Change month buttons at top of the page
 def makeButtons():
     goBack = tkinter.Button(calendarFrame, text = "<", command = lambda : switchMonths(-1))
-    goBack.grid(column = 2, row = 0)
+    goBack.grid(column = 0, row = 0)
     goForward = tkinter.Button(calendarFrame, text = ">", command = lambda : switchMonths(1))
-    goForward.grid(column = 4, row = 0)
+    goForward.grid(column = 6, row = 0)
 
 
 # Creates most of the calendar
@@ -72,7 +78,7 @@ def monthGenerator(startDate, numberOfDays):
 
     # Places the days of the week on the top of the calender
     for nameNumber in range(len(dayNames)):
-        names = tkinter.Label(calendarFrame, text = dayNames[nameNumber])
+        names = tkinter.Label(calendarFrame, text = dayNames[nameNumber], fg = "black")
         names.grid(column = nameNumber, row = 1, sticky = 'nsew')
 
     index = 0
@@ -200,7 +206,6 @@ window = tkinter.Tk()
 window.title("Calender")
 window.geometry("1000x800")
 
-month = date.today().month
 
 # Creates frames from the main root window.
 calendarFrame = tkinter.Frame(window)
@@ -211,8 +216,10 @@ calendarFrame.grid()
 
 today = date.today()
 
-printMonthYear(month)
+printMonthYear(month, year)
 makeButtons()
-monthGenerator(dayMonthStarts(month, today.year), daysInMonth(month, today.year))
+monthGenerator(dayMonthStarts(month, year), daysInMonth(month, year))
+
+
 
 window.mainloop()
