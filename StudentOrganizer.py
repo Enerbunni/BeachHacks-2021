@@ -17,7 +17,7 @@ def monthGenerator(startDate, numberOfDays):
     for row in range(6):
         for column in range(7):
             if index >= startDate and index <= startDate + numberOfDays-1:
-                t = tkinter.Text(calenderFrame, height = 10, width = 25)
+                t = tkinter.Text(calenderFrame, height = 5, width = 15)
                 t.grid(row=row + 1, column=column, sticky = 'nsew')
                 day += 1
             index += 1
@@ -92,11 +92,12 @@ dayOf1st = dayMonthStarts ( date.today().month, date.today().year)
 
 numberDaysofMonth = daysInMonth ( date.today().month, date.today().year)
 
+
 window = tkinter.Tk()
 window.title("Calender")
-window.geometry("1920x800")
+window.geometry("1000x600")
 
-window.attributes('-fullscreen', True)
+window.attributes('-fullscreen', False)
 
 calenderFrame = tkinter.Frame(window)
 todoFrame = tkinter.Frame(window)
@@ -109,5 +110,5 @@ todoFrame.grid(column = 4)
 todoFrame.configure(background="blue")
 
 today = date.today()
-monthGenerator(dayMonthStarts(10, today.year), daysInMonth(10, today.year))
+monthGenerator(dayMonthStarts(today.month, today.year), daysInMonth(today.month, today.year))
 window.mainloop()
