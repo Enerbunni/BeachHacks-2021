@@ -8,4 +8,4 @@ It's a calendar that can:
 * switch between the months (only valid in the century 2000)
 
 # Example Picture
-/ExampleImages/CalendarExample.PNG
+![Example](/ExampleImages/CalendarExample.PNG)
