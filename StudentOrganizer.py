@@ -7,7 +7,7 @@ def monthGenerator(startDate, numberOfDays):
     #holds the names for each day of the week 
     dayNames = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 
-
+    #places the days of the week on the top of the calender
     for nameNumber in range(len(dayNames)):
         names = tkinter.Label(calenderFrame, text = dayNames[nameNumber])
         names.grid(column = nameNumber, row = 0, sticky = 'nsew')
@@ -17,8 +17,18 @@ def monthGenerator(startDate, numberOfDays):
     for row in range(6):
         for column in range(7):
             if index >= startDate and index <= startDate + numberOfDays-1:
-                t = tkinter.Text(calenderFrame, height = 10, width = 25)
-                t.grid(row=row + 1, column=column, sticky = 'nsew')
+                #creates a frame that will hold each day and text box
+                dayFrame = tkinter.Frame(calenderFrame)
+
+                #creates a textbox inside the dayframe
+                t = tkinter.Text(dayFrame, width = 15, height = 5)
+                t.grid(row = 1)
+
+                #changes changes dayframe to be formated correctly
+                dayFrame.grid(row=row + 1, column=column, sticky = 'nsew')
+                dayFrame.columnconfigure(0, weight = 1)
+                dayNumber = tkinter.Label(dayFrame, text = day)
+                dayNumber.grid(row = 0)
                 day += 1
             index += 1
             #line = canvas.create_line(0, 500, 500, 500)
@@ -92,22 +102,26 @@ dayOf1st = dayMonthStarts ( date.today().month, date.today().year)
 
 numberDaysofMonth = daysInMonth ( date.today().month, date.today().year)
 
+#creates the root window
 window = tkinter.Tk()
 window.title("Calender")
 window.geometry("1920x800")
 
-window.attributes('-fullscreen', True)
+#sets the window to full screen
+window.attributes('-fullscreen', False)
 
+#creates frames from the main root window.
 calenderFrame = tkinter.Frame(window)
-todoFrame = tkinter.Frame(window)
 
-window.columnconfigure(0, weight = 1)
+#this should make the things strenchy
+window.columnconfigure(0, weight =1)
 
-calenderFrame.grid(column = 0, columnspan = 3)
+#makes the background black
 calenderFrame.configure(background='black')
-todoFrame.grid(column = 4)
-todoFrame.configure(background="blue")
+
+#makes work
+calenderFrame.grid()
 
 today = date.today()
-monthGenerator(dayMonthStarts(10, today.year), daysInMonth(10, today.year))
+monthGenerator(dayMonthStarts(today.month, today.year), daysInMonth(today.month, today.year))
 window.mainloop()
