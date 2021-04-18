@@ -120,19 +120,21 @@ def saveToJSON():
 
     # Asks the user for a file location and saves a JSON containg the text for each day. 
     fileLocation = filedialog.asksaveasfilename(initialdir = "/", title = "Save JSON to..")
-    with open(fileLocation, 'w') as jFile:
-        json.dump(saveDict, jFile)
+    if fileLocation != '':
+        with open(fileLocation, 'w') as jFile:
+            json.dump(saveDict, jFile)
 
 def loadFromJSON():
     # Asks the user for a JSON file to open 
     fileLocation = filedialog.askopenfilename(initialdir = "/", title = "Select a JSON to open")
-    f = open(fileLocation)
-    global saveDict
-    saveDict = json.load(f)
+    if fileLocation != '':
+        f = open(fileLocation)
+        global saveDict
+        saveDict = json.load(f)
 
-    # Copies the saved text data to the current text objects
-    for day in range(len(textObjectDict)):
-        textObjectDict[day + 1].insert("1.0", saveDict[str(day)])
+        # Copies the saved text data to the current text objects
+        for day in range(len(textObjectDict)):
+            textObjectDict[day + 1].insert("1.0", saveDict[str(day)])
     
     
 # Create function for calculating if it is a leap year
@@ -206,10 +208,11 @@ window = tkinter.Tk()
 window.title("Calender")
 window.geometry("1000x800")
 
+# Centers the calendar
+window.columnconfigure(0, weight = 1)
 
 # Creates frames from the main root window.
 calendarFrame = tkinter.Frame(window)
-
 
 # This makes the grid object appear
 calendarFrame.grid()
