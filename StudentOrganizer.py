@@ -1,21 +1,24 @@
 import tkinter as tkinter
 from datetime import date
 
-# creates the
+
+# creates the grid for calender
 def monthGenerator(startDate, numberOfDays):
+    #holds the names for each day of the week 
     dayNames = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 
+
     for nameNumber in range(len(dayNames)):
-        names = tkinter.Label(window, text = dayNames[nameNumber])
-        names.grid(column = nameNumber, row = 0)
+        names = tkinter.Label(calenderFrame, text = dayNames[nameNumber])
+        names.grid(column = nameNumber, row = 0, sticky = 'nsew')
 
     index = 0
     day = 1
     for row in range(6):
         for column in range(7):
             if index >= startDate and index <= startDate + numberOfDays-1:
-                t = tkinter.Label(window, text= day)
-                t.grid(row=row + 1, column=column)
+                t = tkinter.Text(calenderFrame, height = 10, width = 25)
+                t.grid(row=row + 1, column=column, sticky = 'nsew')
                 day += 1
             index += 1
             #line = canvas.create_line(0, 500, 500, 500)
@@ -91,10 +94,19 @@ numberDaysofMonth = daysInMonth ( date.today().month, date.today().year)
 
 window = tkinter.Tk()
 window.title("Calender")
-window.geometry("1000x800")
-frame1 = tkinter.Frame(window)
-#frame1.pack(background)
+window.geometry("1920x800")
 
+window.attributes('-fullscreen', True)
+
+calenderFrame = tkinter.Frame(window)
+todoFrame = tkinter.Frame(window)
+
+window.columnconfigure(0, weight = 1)
+
+calenderFrame.grid(column = 0, columnspan = 3)
+calenderFrame.configure(background='black')
+todoFrame.grid(column = 4)
+todoFrame.configure(background="blue")
 
 today = date.today()
 monthGenerator(dayMonthStarts(today.month, today.year), daysInMonth(today.month, today.year))
