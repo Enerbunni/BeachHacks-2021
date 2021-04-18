@@ -6,3 +6,6 @@ It's a calendar that can:
 * save the user's entry to the computer
 * load saved entries back onto the calendar
 * switch between the months (only valid in the century 2000)
+
+# Example Picture
+/ExampleImages/CalendarExample.png
