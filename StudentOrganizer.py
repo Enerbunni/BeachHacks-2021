@@ -2,6 +2,7 @@ import json
 import tkinter as tkinter
 from tkinter import filedialog
 from datetime import date
+from tkinter import *
 
 #might be able to use tk varables!!!!!!
 
@@ -35,6 +36,7 @@ def printMonthYear(month, year):
     else:
         writtenMonth = "December"
 
+    #output month and year at top of calendar
     monthYear = tkinter.Label(calenderFrame,  text = writtenMonth + " " + str(year), font= ("Arial", 20))
     monthYear.grid(column = 2, row = 0, columnspan = 3)
 
@@ -50,6 +52,7 @@ def switchMonths(direction):
     if month == 1 and direction == -1:
         month = 13 
         year -= 1
+    #reprint the calendar witht the new values
     calenderFrame.destroy()
     calenderFrame = tkinter.Frame(window)
     calenderFrame.grid()
@@ -57,7 +60,7 @@ def switchMonths(direction):
     makeButtons()
     monthGenerator(dayMonthStarts(month + direction, year), daysInMonth(month + direction, year))
     month += direction
-    
+  
 
 
 #output buttons at top of the page
@@ -75,7 +78,7 @@ def monthGenerator(startDate, numberOfDays):
 
     #places the days of the week on the top of the calender
     for nameNumber in range(len(dayNames)):
-        names = tkinter.Label(calenderFrame, text = dayNames[nameNumber])
+        names = tkinter.Label(calenderFrame, text = dayNames[nameNumber], fg = "black")
         names.grid(column = nameNumber, row = 1, sticky = 'nsew')
 
     index = 0
@@ -100,6 +103,10 @@ def monthGenerator(startDate, numberOfDays):
                 dayNumber.grid(row = 0)
                 day += 1
             index += 1
+    loadFrom = tkinter.Button(calenderFrame, text="load month from...", command = loadFromJSON)
+    saveToButton = tkinter.Button(calenderFrame, text="save month to...", command = saveToJSON)
+    loadFrom.grid(row = 8, column = 4)
+    saveToButton.grid(row = 8, column = 2)
 
 
 
@@ -115,7 +122,7 @@ def saveToJSON():
 def loadFromJSON():
     fileLocation = filedialog.askopenfilename(initialdir = "/", title = "Select a JSON to open")
     f = open(fileLocation)
-    global saveDict #This might be fuckin shit up
+    global saveDict 
     saveDict = json.load(f)
 
     for day in range(len(textObjectDict)):
@@ -219,6 +226,8 @@ today = date.today()
 printMonthYear(month, year)
 makeButtons()
 monthGenerator(dayMonthStarts(month, year), daysInMonth(month, year))
+
+
 
 print(saveDict)
 window.mainloop()
