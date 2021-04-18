@@ -2,12 +2,13 @@ import json
 import tkinter as tkinter
 from tkinter import filedialog
 from datetime import date
+from tkinter import *
 
 #might be able to use tk varables!!!!!!
 
 
 #create function to output the month and year
-def printMonthYear(month):
+def printMonthYear(month, year):
     
     #create table for the written month
     if month == 1:
@@ -35,29 +36,39 @@ def printMonthYear(month):
     else:
         writtenMonth = "December"
 
-    monthYear = tkinter.Label(calenderFrame,  text = writtenMonth + " " + str(date.today().year))
-    monthYear.grid(column = 3, row = 0)
+    #output month and year at top of calendar
+    monthYear = tkinter.Label(calenderFrame,  text = writtenMonth + " " + str(year), font= ("Arial", 20))
+    monthYear.grid(column = 2, row = 0, columnspan = 3)
 
 #function to switch month calendar (1 for forwards and -1 for backwards)
 def switchMonths(direction):
     global calenderFrame
     global month
+    global year
+    #check if we are goint to a new year
+    if month == 12 and direction == 1:
+        month = 0
+        year += 1
+    if month == 1 and direction == -1:
+        month = 13 
+        year -= 1
+    #reprint the calendar witht the new values
     calenderFrame.destroy()
     calenderFrame = tkinter.Frame(window)
     calenderFrame.grid()
-    printMonthYear(month + direction) # pylint: disable=E0601
+    printMonthYear(month + direction, year) # pylint: disable=E0601
     makeButtons()
-    monthGenerator(dayMonthStarts(month + direction, today.year), daysInMonth(month + direction, today.year))
+    monthGenerator(dayMonthStarts(month + direction, year), daysInMonth(month + direction, year))
     month += direction
-    
+  
 
 
 #output buttons at top of the page
 def makeButtons():
     goBack = tkinter.Button(calenderFrame, text = "<", command = lambda : switchMonths(-1))
-    goBack.grid(column = 2, row = 0)
+    goBack.grid(column = 0, row = 0)
     goForward = tkinter.Button(calenderFrame, text = ">", command = lambda : switchMonths(1))
-    goForward.grid(column = 4, row = 0)
+    goForward.grid(column = 6, row = 0)
 
 
 # creates the grid for calender
@@ -67,7 +78,7 @@ def monthGenerator(startDate, numberOfDays):
 
     #places the days of the week on the top of the calender
     for nameNumber in range(len(dayNames)):
-        names = tkinter.Label(calenderFrame, text = dayNames[nameNumber])
+        names = tkinter.Label(calenderFrame, text = dayNames[nameNumber], fg = "black")
         names.grid(column = nameNumber, row = 1, sticky = 'nsew')
 
     index = 0
@@ -92,6 +103,10 @@ def monthGenerator(startDate, numberOfDays):
                 dayNumber.grid(row = 0)
                 day += 1
             index += 1
+    loadFrom = tkinter.Button(calenderFrame, text="load month from...", command = loadFromJSON)
+    saveToButton = tkinter.Button(calenderFrame, text="save month to...", command = saveToJSON)
+    loadFrom.grid(row = 8, column = 4)
+    saveToButton.grid(row = 8, column = 2)
 
 
 
@@ -107,7 +122,7 @@ def saveToJSON():
 def loadFromJSON():
     fileLocation = filedialog.askopenfilename(initialdir = "/", title = "Select a JSON to open")
     f = open(fileLocation)
-    global saveDict #This might be fuckin shit up
+    global saveDict 
     saveDict = json.load(f)
 
     for day in range(len(textObjectDict)):
@@ -187,6 +202,10 @@ month = tkinter.IntVar()
 month = date.today().month
 #https://www.python-course.eu/tkinter_variable_classes.php
 
+#make variable for year
+year = tkinter.IntVar()
+year = date.today().year
+
 #creates frames from the main root window.
 calenderFrame = tkinter.Frame(window)
 
@@ -204,9 +223,11 @@ calenderFrame.grid()
 
 today = date.today()
 
-printMonthYear(month)
+printMonthYear(month, year)
 makeButtons()
-monthGenerator(dayMonthStarts(month, today.year), daysInMonth(month, today.year))
+monthGenerator(dayMonthStarts(month, year), daysInMonth(month, year))
+
+
 
 print(saveDict)
 window.mainloop()
