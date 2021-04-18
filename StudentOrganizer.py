@@ -35,8 +35,8 @@ def printMonthYear(month, year):
     else:
         writtenMonth = "December"
 
-    monthYear = tkinter.Label(calenderFrame,  text = writtenMonth + " " + str(year))
-    monthYear.grid(column = 3, row = 0)
+    monthYear = tkinter.Label(calenderFrame,  text = writtenMonth + " " + str(year), font= ("Arial", 20))
+    monthYear.grid(column = 2, row = 0, columnspan = 3)
 
 #function to switch month calendar (1 for forwards and -1 for backwards)
 def switchMonths(direction):
@@ -63,9 +63,9 @@ def switchMonths(direction):
 #output buttons at top of the page
 def makeButtons():
     goBack = tkinter.Button(calenderFrame, text = "<", command = lambda : switchMonths(-1))
-    goBack.grid(column = 2, row = 0)
+    goBack.grid(column = 0, row = 0)
     goForward = tkinter.Button(calenderFrame, text = ">", command = lambda : switchMonths(1))
-    goForward.grid(column = 4, row = 0)
+    goForward.grid(column = 6, row = 0)
 
 
 # creates the grid for calender
