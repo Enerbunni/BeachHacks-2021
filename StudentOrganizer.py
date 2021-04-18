@@ -39,7 +39,7 @@ def dayMonthStarts(month, year):
     # add day of month (always 1)
     calculation += 1
     # table for adding proper month key
-    if month == 1 or month == 8:
+    if month == 1 or month == 10:
         calculation += 1
     elif month == 2 or month == 3 or month == 11:
         calculation += 1
@@ -97,5 +97,5 @@ frame1 = tkinter.Frame(window)
 
 
 today = date.today()
-monthGenerator(dayMonthStarts(today.month, today.year), daysInMonth(today.month, today.year))
+monthGenerator(dayMonthStarts(10, today.year), daysInMonth(10, today.year))
 window.mainloop()
