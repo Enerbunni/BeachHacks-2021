@@ -147,7 +147,7 @@ def dayMonthStarts(month, year):
     if month == 1 or month == 10:
         calculation += 1
     elif month == 2 or month == 3 or month == 11:
-        calculation += 1
+        calculation += 4
     elif month == 5:
         calculation += 2
     elif month == 6:
@@ -161,7 +161,7 @@ def dayMonthStarts(month, year):
     # check if the year is a leap year
     leapYear = isLeapYear(year)
     # subtract 1 if it is January or February of a leap year
-    if leapYear and month == 1 or month == 2:
+    if leapYear and (month == 1 or month == 2):
         calculation -= 1
     # add century code (assume we are in 2000's)
     calculation += 6
