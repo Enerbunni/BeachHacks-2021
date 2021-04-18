@@ -7,7 +7,7 @@ from datetime import date
 
 
 #create function to output the month and year
-def printMonthYear(month):
+def printMonthYear(month, year):
     
     #create table for the written month
     if month == 1:
@@ -35,19 +35,27 @@ def printMonthYear(month):
     else:
         writtenMonth = "December"
 
-    monthYear = tkinter.Label(calenderFrame,  text = writtenMonth + " " + str(date.today().year))
+    monthYear = tkinter.Label(calenderFrame,  text = writtenMonth + " " + str(year))
     monthYear.grid(column = 3, row = 0)
 
 #function to switch month calendar (1 for forwards and -1 for backwards)
 def switchMonths(direction):
     global calenderFrame
     global month
+    global year
+    #check if we are goint to a new year
+    if month == 12 and direction == 1:
+        month = 0
+        year += 1
+    if month == 1 and direction == -1:
+        month = 13 
+        year -= 1
     calenderFrame.destroy()
     calenderFrame = tkinter.Frame(window)
     calenderFrame.grid()
-    printMonthYear(month + direction) # pylint: disable=E0601
+    printMonthYear(month + direction, year) # pylint: disable=E0601
     makeButtons()
-    monthGenerator(dayMonthStarts(month + direction, today.year), daysInMonth(month + direction, today.year))
+    monthGenerator(dayMonthStarts(month + direction, year), daysInMonth(month + direction, year))
     month += direction
     
 
@@ -187,6 +195,10 @@ month = tkinter.IntVar()
 month = date.today().month
 #https://www.python-course.eu/tkinter_variable_classes.php
 
+#make variable for year
+year = tkinter.IntVar()
+year = date.today().year
+
 #creates frames from the main root window.
 calenderFrame = tkinter.Frame(window)
 
@@ -204,9 +216,9 @@ calenderFrame.grid()
 
 today = date.today()
 
-printMonthYear(month)
+printMonthYear(month, year)
 makeButtons()
-monthGenerator(dayMonthStarts(month, today.year), daysInMonth(month, today.year))
+monthGenerator(dayMonthStarts(month, year), daysInMonth(month, year))
 
 print(saveDict)
 window.mainloop()
