@@ -1,11 +1,12 @@
 import tkinter as tkinter
 from datetime import date
 
+month = date.today().month
+
 #create function to output the month and year
-def printMonthYear():
+def printMonthYear(month):
 
     #create table for the written month
-    month = date.today().month
 
     if month == 1:
         writtenMonth = "January"
@@ -32,12 +33,22 @@ def printMonthYear():
     else:
         writtenMonth = "December"
 
-    monthYear = tkinter.Label(calenderFrame, text = writtenMonth + " " + str(date.today().year))
+    monthYear = tkinter.Label(calenderFrame,  text = writtenMonth + " " + str(date.today().year))
     monthYear.grid(column = 3, row = 0)
 
+def Backwards(window, calenderFrame, month):
 
-def makeButtons():
-    goBack = tkinter.Button(calenderFrame, text = "<", command = quit)
+    calenderFrame.destroy()
+    calenderFrame = tkinter.Frame(window)
+    calenderFrame.grid()
+    printMonthYear(month - 1)
+    makeButtons(window, calenderFrame)
+    monthGenerator(dayMonthStarts(today.month - 1, today.year), daysInMonth(today.month - 1, today.year))
+    
+
+
+def makeButtons(window, calenderFrame):
+    goBack = tkinter.Button(calenderFrame, text = "<", command = lambda : Backwards(window, calenderFrame))
     goBack.grid(column = 2, row = 0)
     goForward = tkinter.Button(calenderFrame, text = ">", command = quit)
     goForward.grid(column = 4, row = 0)
@@ -137,7 +148,7 @@ def daysInMonth (month, year):
             numberDays = 28
     return numberDays
     
-        
+       
 
 dayOf1st = dayMonthStarts ( date.today().month, date.today().year)
 
@@ -162,7 +173,7 @@ calenderFrame.grid()
 
 today = date.today()
 
-printMonthYear()
-makeButtons()
+printMonthYear(today.month)
+makeButtons(window, calenderFrame)
 monthGenerator(dayMonthStarts(today.month, today.year), daysInMonth(today.month, today.year))
 window.mainloop()
