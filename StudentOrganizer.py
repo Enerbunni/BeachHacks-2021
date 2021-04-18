@@ -1,4 +1,6 @@
+import json
 import tkinter as tkinter
+from tkinter import filedialog
 from datetime import date
 
 
@@ -33,6 +35,10 @@ def monthGenerator(startDate, numberOfDays):
             index += 1
             #line = canvas.create_line(0, 500, 500, 500)
 
+def saveToJSON():
+    fileLocation = filedialog.asksaveasfilename(initialdir = "/", title = "Select a File")
+    with open(fileLocation, 'w') as jFile:
+        json.dump(saveDict, jFile)
 
 # create function for calculating if it is a leap year
 def isLeapYear(year):
@@ -42,8 +48,6 @@ def isLeapYear(year):
         return False
 
 # create function for calculating what day month starts
-
-
 def dayMonthStarts(month, year):
     # get last two digits (default 21 for 2021)
     lastTwoYear = year - 2000
@@ -95,23 +99,25 @@ def daysInMonth (month, year):
         else:
             numberDays = 28
     return numberDays
-    
-        
+
 
 dayOf1st = dayMonthStarts ( date.today().month, date.today().year)
 
 numberDaysofMonth = daysInMonth ( date.today().month, date.today().year)
 
+saveDict = {'month': 0}
+
 #creates the root window
 window = tkinter.Tk()
 window.title("Calender")
-window.geometry("1920x800")
-
-#sets the window to full screen
-window.attributes('-fullscreen', False)
+window.geometry("1000x800")
 
 #creates frames from the main root window.
 calenderFrame = tkinter.Frame(window)
+
+
+saveToButton = tkinter.Button(calenderFrame, text="save to...", command = saveToJSON)
+saveToButton.grid(row = 8, column = 3)
 
 #this should make the things strenchy
 window.columnconfigure(0, weight =1)
