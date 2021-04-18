@@ -7,7 +7,7 @@ from datetime import date
 month = date.today().month
 year = date.today().year
 
-#create function to output the month and year
+# Create function to output the month and year
 def printMonthYear(month, year):
     
     # Create table for the written month
@@ -36,7 +36,7 @@ def printMonthYear(month, year):
     else:
         writtenMonth = "December"
 
-    #output month and year at top of calendar
+    # Output month and year at top of calendar
     monthYear = tkinter.Label(calendarFrame,  text = writtenMonth + " " + str(year), font= ("Arial", 20))
     monthYear.grid(column = 2, row = 0, columnspan = 3)
 
@@ -52,7 +52,12 @@ def switchMonths(direction):
     if month == 1 and direction == -1:
         month = 13 
         year -= 1
-    #reprint the calendar witht the new values
+
+    # Clears the old dictionarys so they can be used in the next month
+    textObjectDict.clear()
+    saveDict.clear()
+    
+    # Reprint the calendar with the new values
     calendarFrame.destroy()
     calendarFrame = tkinter.Frame(window)
     calendarFrame.grid()
