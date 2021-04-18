@@ -26,6 +26,9 @@ def monthGenerator(startDate, numberOfDays):
                 t = tkinter.Text(dayFrame, width = 15, height = 5)
                 t.grid(row = 1)
 
+                #adds the text object to the save dict
+                textObjectDict[day] = t 
+
                 #changes changes dayframe to be formated correctly
                 dayFrame.grid(row=row + 1, column=column, sticky = 'nsew')
                 dayFrame.columnconfigure(0, weight = 1)
@@ -36,10 +39,23 @@ def monthGenerator(startDate, numberOfDays):
             #line = canvas.create_line(0, 500, 500, 500)
 
 def saveToJSON():
-    fileLocation = filedialog.asksaveasfilename(initialdir = "/", title = "Select a File")
+    for day in range(len(textObjectDict)):
+        saveDict[day] = textObjectDict[day + 1].get("1.0", "end - 1 chars")
+
+    fileLocation = filedialog.asksaveasfilename(initialdir = "/", title = "Save JSON to..")
     with open(fileLocation, 'w') as jFile:
         json.dump(saveDict, jFile)
 
+def loadFromJSON():
+    fileLocation = filedialog.askopenfilename(initialdir = "/", title = "Select a JSON to open")
+    f = open(fileLocation)
+    global saveDict #This might be fuckin shit up
+    saveDict = json.load(f)
+
+    for day in range(len(textObjectDict)):
+        textObjectDict[day + 1].insert("1.0", saveDict[str(day)])
+    
+    
 # create function for calculating if it is a leap year
 def isLeapYear(year):
     if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0):
@@ -105,19 +121,27 @@ dayOf1st = dayMonthStarts ( date.today().month, date.today().year)
 
 numberDaysofMonth = daysInMonth ( date.today().month, date.today().year)
 
-saveDict = {'month': 0}
+global saveDict
+saveDict = {}
+
+global textObjectDict
+textObjectDict = {}
 
 #creates the root window
+global window
 window = tkinter.Tk()
 window.title("Calender")
 window.geometry("1000x800")
 
 #creates frames from the main root window.
+global calenderFrame
 calenderFrame = tkinter.Frame(window)
 
-
+loadFrom = tkinter.Button(calenderFrame, text="load from...", command = loadFromJSON)
 saveToButton = tkinter.Button(calenderFrame, text="save to...", command = saveToJSON)
-saveToButton.grid(row = 8, column = 3)
+
+loadFrom.grid(row = 8, column = 4)
+saveToButton.grid(row = 8, column = 2)
 
 #this should make the things strenchy
 window.columnconfigure(0, weight =1)
@@ -130,4 +154,6 @@ calenderFrame.grid()
 
 today = date.today()
 monthGenerator(dayMonthStarts(today.month, today.year), daysInMonth(today.month, today.year))
+
+print(saveDict)
 window.mainloop()
