@@ -3,6 +3,7 @@ import tkinter as tkinter
 from tkinter import filedialog
 from datetime import date
 
+global month
 month = date.today().month
 
 #create function to output the month and year
@@ -38,21 +39,39 @@ def printMonthYear(month):
     monthYear = tkinter.Label(calenderFrame,  text = writtenMonth + " " + str(date.today().year))
     monthYear.grid(column = 3, row = 0)
 
-def Backwards(window, calenderFrame, month):
+#function to switch month calendar backwards
+def Backwards():
 
+    global calenderFrame
+    global month
     calenderFrame.destroy()
     calenderFrame = tkinter.Frame(window)
     calenderFrame.grid()
     printMonthYear(month - 1)
-    makeButtons(window, calenderFrame)
-    monthGenerator(dayMonthStarts(today.month - 1, today.year), daysInMonth(today.month - 1, today.year))
+    makeButtons()
+    monthGenerator(dayMonthStarts(month - 1, today.year), daysInMonth(month - 1, today.year))
+    month -= 1
     
 
+#function to switch month calendar forwards
+def Forwards():
 
-def makeButtons(window, calenderFrame):
-    goBack = tkinter.Button(calenderFrame, text = "<", command = lambda : Backwards(window, calenderFrame))
+    global calenderFrame
+    global month
+    calenderFrame.destroy()
+    calenderFrame = tkinter.Frame(window)
+    calenderFrame.grid()
+    printMonthYear(month + 1)
+    makeButtons()
+    monthGenerator(dayMonthStarts(month +  1, today.year), daysInMonth(month + 1, today.year))
+    month += 1
+
+
+#output buttons at top of the page
+def makeButtons():
+    goBack = tkinter.Button(calenderFrame, text = "<", command = Backwards)
     goBack.grid(column = 2, row = 0)
-    goForward = tkinter.Button(calenderFrame, text = ">", command = quit)
+    goForward = tkinter.Button(calenderFrame, text = ">", command = Forwards)
     goForward.grid(column = 4, row = 0)
 
 
@@ -203,7 +222,7 @@ calenderFrame.grid()
 today = date.today()
 
 printMonthYear(today.month)
-makeButtons(window, calenderFrame)
+makeButtons()
 monthGenerator(dayMonthStarts(today.month, today.year), daysInMonth(today.month, today.year))
 
 print(saveDict)
