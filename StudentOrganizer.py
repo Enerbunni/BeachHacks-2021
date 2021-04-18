@@ -3,14 +3,13 @@ import tkinter as tkinter
 from tkinter import filedialog
 from datetime import date
 
-global month
-month = date.today().month
+#might be able to use tk varables!!!!!!
+
 
 #create function to output the month and year
 def printMonthYear(month):
-
+    
     #create table for the written month
-
     if month == 1:
         writtenMonth = "January"
     elif month == 2:
@@ -39,39 +38,25 @@ def printMonthYear(month):
     monthYear = tkinter.Label(calenderFrame,  text = writtenMonth + " " + str(date.today().year))
     monthYear.grid(column = 3, row = 0)
 
-#function to switch month calendar backwards
-def Backwards():
-
+#function to switch month calendar (1 for forwards and -1 for backwards)
+def switchMonths(direction):
     global calenderFrame
     global month
     calenderFrame.destroy()
     calenderFrame = tkinter.Frame(window)
     calenderFrame.grid()
-    printMonthYear(month - 1)
+    printMonthYear(month + direction) # pylint: disable=E0601
     makeButtons()
-    monthGenerator(dayMonthStarts(month - 1, today.year), daysInMonth(month - 1, today.year))
-    month -= 1
+    monthGenerator(dayMonthStarts(month + direction, today.year), daysInMonth(month + direction, today.year))
+    month += direction
     
-
-#function to switch month calendar forwards
-def Forwards():
-
-    global calenderFrame
-    global month
-    calenderFrame.destroy()
-    calenderFrame = tkinter.Frame(window)
-    calenderFrame.grid()
-    printMonthYear(month + 1)
-    makeButtons()
-    monthGenerator(dayMonthStarts(month +  1, today.year), daysInMonth(month + 1, today.year))
-    month += 1
 
 
 #output buttons at top of the page
 def makeButtons():
-    goBack = tkinter.Button(calenderFrame, text = "<", command = Backwards)
+    goBack = tkinter.Button(calenderFrame, text = "<", command = lambda : switchMonths(-1))
     goBack.grid(column = 2, row = 0)
-    goForward = tkinter.Button(calenderFrame, text = ">", command = Forwards)
+    goForward = tkinter.Button(calenderFrame, text = ">", command = lambda : switchMonths(1))
     goForward.grid(column = 4, row = 0)
 
 
@@ -107,7 +92,8 @@ def monthGenerator(startDate, numberOfDays):
                 dayNumber.grid(row = 0)
                 day += 1
             index += 1
-            #line = canvas.create_line(0, 500, 500, 500)
+
+
 
 def saveToJSON():
     #saves the raw text data from the text objects 
@@ -188,28 +174,24 @@ def daysInMonth (month, year):
             numberDays = 28
     return numberDays
 
-dayOf1st = dayMonthStarts ( date.today().month, date.today().year)
-
-numberDaysofMonth = daysInMonth ( date.today().month, date.today().year)
-
-global saveDict
 saveDict = {}
 
-global textObjectDict
 textObjectDict = {}
 
 #creates the root window
-global window
 window = tkinter.Tk()
 window.title("Calender")
 window.geometry("1000x800")
 
+month = tkinter.IntVar()
+month = date.today().month
+#https://www.python-course.eu/tkinter_variable_classes.php
+
 #creates frames from the main root window.
-global calenderFrame
 calenderFrame = tkinter.Frame(window)
 
-loadFrom = tkinter.Button(calenderFrame, text="load from...", command = loadFromJSON)
-saveToButton = tkinter.Button(calenderFrame, text="save to...", command = saveToJSON)
+loadFrom = tkinter.Button(calenderFrame, text="load month from...", command = loadFromJSON)
+saveToButton = tkinter.Button(calenderFrame, text="save month to...", command = saveToJSON)
 
 loadFrom.grid(row = 8, column = 4)
 saveToButton.grid(row = 8, column = 2)
@@ -222,9 +204,9 @@ calenderFrame.grid()
 
 today = date.today()
 
-printMonthYear(today.month)
+printMonthYear(month)
 makeButtons()
-monthGenerator(dayMonthStarts(today.month, today.year), daysInMonth(today.month, today.year))
+monthGenerator(dayMonthStarts(month, today.year), daysInMonth(month, today.year))
 
 print(saveDict)
 window.mainloop()
