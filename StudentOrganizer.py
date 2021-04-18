@@ -39,6 +39,7 @@ def monthGenerator(startDate, numberOfDays):
             #line = canvas.create_line(0, 500, 500, 500)
 
 def saveToJSON():
+    #saves the raw text data from the text objects 
     for day in range(len(textObjectDict)):
         saveDict[day] = textObjectDict[day + 1].get("1.0", "end - 1 chars")
 
