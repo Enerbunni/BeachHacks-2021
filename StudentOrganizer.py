@@ -1,6 +1,43 @@
 import tkinter as tkinter
 from datetime import date
 
+#create function to output the month and year
+def printMonthYear():
+
+    #create table for the written month
+    month = date.today().month
+
+    if month == 1:
+        writtenMonth = "January"
+    elif month == 2:
+        writtenMonth = "February"
+    elif month == 3:
+        writtenMonth = "March"
+    elif month == 4:
+        writtenMonth = "April"
+    elif month == 5:
+        writtenMonth = "May"
+    elif month == 6:
+        writtenMonth = "June"
+    elif month == 7:
+        writtenMonth = "July"
+    elif month == 8:
+        writtenMonth = "August"
+    elif month == 9:
+        writtenMonth = "September"
+    elif month == 10:
+        writtenMonth = "October"
+    elif month == 11:
+        writtenMonth = "November"
+    else:
+        writtenMonth = "December"
+
+    monthYear = tkinter.Label(calenderFrame, text = writtenMonth + " " + str(date.today().year))
+    monthYear.grid(column = 3, row = 0)
+
+
+
+
 
 # creates the grid for calender
 def monthGenerator(startDate, numberOfDays):
@@ -10,7 +47,7 @@ def monthGenerator(startDate, numberOfDays):
     #places the days of the week on the top of the calender
     for nameNumber in range(len(dayNames)):
         names = tkinter.Label(calenderFrame, text = dayNames[nameNumber])
-        names.grid(column = nameNumber, row = 0, sticky = 'nsew')
+        names.grid(column = nameNumber, row = 1, sticky = 'nsew')
 
     index = 0
     day = 1
@@ -25,7 +62,7 @@ def monthGenerator(startDate, numberOfDays):
                 t.grid(row = 1)
 
                 #changes changes dayframe to be formated correctly
-                dayFrame.grid(row=row + 1, column=column, sticky = 'nsew')
+                dayFrame.grid(row=row + 2, column=column, sticky = 'nsew')
                 dayFrame.columnconfigure(0, weight = 1)
                 dayNumber = tkinter.Label(dayFrame, text = day)
                 dayNumber.grid(row = 0)
@@ -116,12 +153,11 @@ calenderFrame = tkinter.Frame(window)
 #this should make the things strenchy
 window.columnconfigure(0, weight =1)
 
-#makes the background black
-calenderFrame.configure(background='black')
-
 #makes work
 calenderFrame.grid()
 
 today = date.today()
+
+printMonthYear()
 monthGenerator(dayMonthStarts(today.month, today.year), daysInMonth(today.month, today.year))
 window.mainloop()
