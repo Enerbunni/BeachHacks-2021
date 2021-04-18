@@ -3,13 +3,11 @@ import tkinter as tkinter
 from tkinter import filedialog
 from datetime import date
 
-#might be able to use tk varables!!!!!!
 
-
-#create function to output the month and year
+# Create function to output the month and year
 def printMonthYear(month):
     
-    #create table for the written month
+    # Create table for the written month
     if month == 1:
         writtenMonth = "January"
     elif month == 2:
@@ -35,39 +33,46 @@ def printMonthYear(month):
     else:
         writtenMonth = "December"
 
-    monthYear = tkinter.Label(calenderFrame,  text = writtenMonth + " " + str(date.today().year))
+    monthYear = tkinter.Label(calendarFrame,  text = writtenMonth + " " + str(date.today().year))
     monthYear.grid(column = 3, row = 0)
 
-#function to switch month calendar (1 for forwards and -1 for backwards)
+# Function to switch month calendar (1 for forwards and -1 for backwards)
 def switchMonths(direction):
-    global calenderFrame
+    global calendarFrame
     global month
-    calenderFrame.destroy()
-    calenderFrame = tkinter.Frame(window)
-    calenderFrame.grid()
+    # Destroys the current calendarFrame 
+    calendarFrame.destroy()
+
+    # Creates a new calendarFrame
+    calendarFrame = tkinter.Frame(window)
+    calendarFrame.grid()
+
+    # Encountered a werid VS Code bug
     printMonthYear(month + direction) # pylint: disable=E0601
+
+    # Generates the rest of the new month
     makeButtons()
     monthGenerator(dayMonthStarts(month + direction, today.year), daysInMonth(month + direction, today.year))
     month += direction
     
 
 
-#output buttons at top of the page
+# Change month buttons at top of the page
 def makeButtons():
-    goBack = tkinter.Button(calenderFrame, text = "<", command = lambda : switchMonths(-1))
+    goBack = tkinter.Button(calendarFrame, text = "<", command = lambda : switchMonths(-1))
     goBack.grid(column = 2, row = 0)
-    goForward = tkinter.Button(calenderFrame, text = ">", command = lambda : switchMonths(1))
+    goForward = tkinter.Button(calendarFrame, text = ">", command = lambda : switchMonths(1))
     goForward.grid(column = 4, row = 0)
 
 
-# creates the grid for calender
+# Creates most of the calendar
 def monthGenerator(startDate, numberOfDays):
-    #holds the names for each day of the week 
+    # Holds the names for each day of the week 
     dayNames = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 
-    #places the days of the week on the top of the calender
+    # Places the days of the week on the top of the calender
     for nameNumber in range(len(dayNames)):
-        names = tkinter.Label(calenderFrame, text = dayNames[nameNumber])
+        names = tkinter.Label(calendarFrame, text = dayNames[nameNumber])
         names.grid(column = nameNumber, row = 1, sticky = 'nsew')
 
     index = 0
@@ -75,61 +80,71 @@ def monthGenerator(startDate, numberOfDays):
     for row in range(6):
         for column in range(7):
             if index >= startDate and index <= startDate + numberOfDays-1:
-                #creates a frame that will hold each day and text box
-                dayFrame = tkinter.Frame(calenderFrame)
+                # Creates a frame that will hold each day and text box
+                dayFrame = tkinter.Frame(calendarFrame)
 
-                #creates a textbox inside the dayframe
+                # Creates a textbox inside the dayframe
                 t = tkinter.Text(dayFrame, width = 15, height = 5)
                 t.grid(row = 1)
 
-                #adds the text object to the save dict
+                # Adds the text object to the save dict
                 textObjectDict[day] = t 
 
-                #changes changes dayframe to be formated correctly
+                # Changes changes dayframe to be formated correctly
                 dayFrame.grid(row=row + 2, column=column, sticky = 'nsew')
                 dayFrame.columnconfigure(0, weight = 1)
                 dayNumber = tkinter.Label(dayFrame, text = day)
                 dayNumber.grid(row = 0)
                 day += 1
             index += 1
+    # Creates the buttons to load and save JSON's
+    loadFrom = tkinter.Button(calendarFrame, text="load month from...", command = loadFromJSON)
+    saveToButton = tkinter.Button(calendarFrame, text="save month to...", command = saveToJSON)
+
+    # Places them below the calendar
+    loadFrom.grid(row = 8, column = 4)
+    saveToButton.grid(row = 8, column = 2)
 
 
 
 def saveToJSON():
-    #saves the raw text data from the text objects 
+    # Saves the raw text data from the text objects 
     for day in range(len(textObjectDict)):
         saveDict[day] = textObjectDict[day + 1].get("1.0", "end - 1 chars")
 
+    # Asks the user for a file location and saves a JSON containg the text for each day. 
     fileLocation = filedialog.asksaveasfilename(initialdir = "/", title = "Save JSON to..")
     with open(fileLocation, 'w') as jFile:
         json.dump(saveDict, jFile)
 
 def loadFromJSON():
+    # Asks the user for a JSON file to open 
     fileLocation = filedialog.askopenfilename(initialdir = "/", title = "Select a JSON to open")
     f = open(fileLocation)
-    global saveDict #This might be fuckin shit up
+    global saveDict
     saveDict = json.load(f)
 
+    # Copies the saved text data to the current text objects
     for day in range(len(textObjectDict)):
         textObjectDict[day + 1].insert("1.0", saveDict[str(day)])
     
     
-# create function for calculating if it is a leap year
+# Create function for calculating if it is a leap year
 def isLeapYear(year):
     if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0):
         return True
     else:
         return False
 
-# create function for calculating what day month starts
+# Create function for calculating what day month starts
 def dayMonthStarts(month, year):
-    # get last two digits (default 21 for 2021)
+    # Get last two digits (default 21 for 2021)
     lastTwoYear = year - 2000
-    # integer division by 4
+    # Integer division by 4
     calculation = lastTwoYear // 4
-    # add day of month (always 1)
+    # Add day of month (always 1)
     calculation += 1
-    # table for adding proper month key
+    # Table for adding proper month key
     if month == 1 or month == 10:
         calculation += 1
     elif month == 2 or month == 3 or month == 11:
@@ -144,29 +159,29 @@ def dayMonthStarts(month, year):
         calculation += 6
     else:
         calculation += 0
-    # check if the year is a leap year
+    # Check if the year is a leap year
     leapYear = isLeapYear(year)
-    # subtract 1 if it is January or February of a leap year
+    # Subtract 1 if it is January or February of a leap year
     if leapYear and (month == 1 or month == 2):
         calculation -= 1
-    # add century code (assume we are in 2000's)
+    # Add century code (assume we are in 2000's)
     calculation += 6
-    # add last two digits to the caluclation
+    # Add last two digits to the caluclation
     calculation += lastTwoYear
-    # get number output based on calculation (Sunday = 1, Monday =2..... Saturday =0)
+    # Get number output based on calculation (Sunday = 1, Monday =2..... Saturday =0)
     dayOfWeek = calculation % 7
     return dayOfWeek
 
-#create function to figure out how many days are in a month
+# Create function to figure out how many days are in a month
 def daysInMonth (month, year):
-    #all months that have 31 days
+    # All months that have 31 days
     if month == 1 or month == 3 or month == 5 or month == 7 or month == 8 or month == 12 or month == 10:
         numberDays = 31
-    #all months that have 30 days
+    # All months that have 30 days
     elif month == 4 or month == 6 or month == 9 or month == 11:
         numberDays = 30
     else:
-        #check to see if leap year to determine how many days in Feb
+        # Check to see if leap year to determine how many days in Feb
         leapYear = isLeapYear(year)
         if leapYear:
             numberDays = 29
@@ -174,33 +189,25 @@ def daysInMonth (month, year):
             numberDays = 28
     return numberDays
 
+# Holds the raw text input for each day
 saveDict = {}
 
+# Holds the text objects on each day
 textObjectDict = {}
 
-#creates the root window
+# Creates the root window
 window = tkinter.Tk()
 window.title("Calender")
 window.geometry("1000x800")
 
-month = tkinter.IntVar()
 month = date.today().month
-#https://www.python-course.eu/tkinter_variable_classes.php
 
-#creates frames from the main root window.
-calenderFrame = tkinter.Frame(window)
+# Creates frames from the main root window.
+calendarFrame = tkinter.Frame(window)
 
-loadFrom = tkinter.Button(calenderFrame, text="load month from...", command = loadFromJSON)
-saveToButton = tkinter.Button(calenderFrame, text="save month to...", command = saveToJSON)
 
-loadFrom.grid(row = 8, column = 4)
-saveToButton.grid(row = 8, column = 2)
-
-#this should make the things strenchy
-window.columnconfigure(0, weight =1)
-
-#makes work
-calenderFrame.grid()
+# This makes the grid object appear
+calendarFrame.grid()
 
 today = date.today()
 
@@ -208,5 +215,4 @@ printMonthYear(month)
 makeButtons()
 monthGenerator(dayMonthStarts(month, today.year), daysInMonth(month, today.year))
 
-print(saveDict)
 window.mainloop()
