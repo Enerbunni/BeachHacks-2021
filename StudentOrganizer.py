@@ -36,7 +36,11 @@ def printMonthYear():
     monthYear.grid(column = 3, row = 0)
 
 
-
+def makeButtons():
+    goBack = tkinter.Button(calenderFrame, text = "<", command = quit)
+    goBack.grid(column = 2, row = 0)
+    goForward = tkinter.Button(calenderFrame, text = ">", command = quit)
+    goForward.grid(column = 4, row = 0)
 
 
 # creates the grid for calender
@@ -159,5 +163,6 @@ calenderFrame.grid()
 today = date.today()
 
 printMonthYear()
+makeButtons()
 monthGenerator(dayMonthStarts(today.month, today.year), daysInMonth(today.month, today.year))
 window.mainloop()
